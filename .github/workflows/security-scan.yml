@@ -8,13 +8,11 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Run TruffleHog OSS
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
-          extra_args: --debug
+      - name: Install TruffleHog CLI
+        run: |
+          curl -sSfL https://githubusercontent.com | sh -s -- -b /usr/local/bin
+
+      - name: Run Deep Directory Scan
+        run: |
+          trufflehog filesystem . --fail
